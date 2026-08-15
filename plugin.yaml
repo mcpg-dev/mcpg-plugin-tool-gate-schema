@@ -1,0 +1,15 @@
+schema: mcpg.dev/plugin/v1
+id: dev.mcpg.tool-gate.schema
+name: JSON Schema Contract Gate
+license: Apache-2.0
+description: |
+  A pre-dispatch ToolGate that validates tool-call arguments against an
+  operator-supplied inline JSON Schema and rejects malformed calls with a
+  precise 4xx (JSON-RPC -32602 Invalid params by default) before the backend
+  ever runs. The schema is compiled once at load; validation is pure CPU and
+  fully offline (in-document $ref only). An optional JSON Pointer scopes
+  validation to a sub-field of the arguments. Fails closed on bad config.
+class: tool_gate
+runtime: native-cdylib-v1
+protocol_version: "1.0"
+required_capabilities: []

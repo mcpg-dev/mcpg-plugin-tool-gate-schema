@@ -1,0 +1,29 @@
+[package]
+name = "mcpg-plugin-tool-gate-schema"
+version = "0.1.0-alpha.15"
+license = "Apache-2.0"
+edition = "2024"
+description = """
+JSON Schema contract ToolGate plugin for mcpg. Rejects tool calls whose
+arguments fail an operator-supplied inline JSON Schema with a precise 4xx,
+before the call reaches the backend. A pre-dispatch security control: the
+schema is compiled once at load and validation is pure CPU (fully offline, no
+remote $ref fetch). Fails closed on bad config (refuses to load).
+"""
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = []
+cdylib-export = []
+static-firstparty = []
+
+[dependencies]
+mcpg-plugin-protocol = { git = "https://github.com/mcpg-dev/mcpg-plugin-protocol", tag = "v0.1.0-beta.13", version = "=0.1.0-beta.13" }
+mcpg-plugin-sdk      = { git = "https://github.com/mcpg-dev/mcpg-plugin-sdk", tag = "v0.1.0-beta.13", version = "=0.1.0-beta.13", features = ["static-firstparty"] }
+serde      = { version = "1", features = ["derive"] }
+serde_json = "1"
+# Pure-Rust JSON Schema validator. default-features OFF: validate inline
+# schemas only (in-document $ref works offline) — no resolve-http/TLS pulled in.
+jsonschema = { version = "0.28", default-features = false }
